@@ -3,19 +3,21 @@ package com.vppanchalofficial.buttonjetpack
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.vppanchalofficial.buttonjetpack.ui.theme.ButtonJetpackTheme
 
 class MainActivity : ComponentActivity() {
@@ -24,7 +26,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ButtonJetpackTheme {
                 // A surface container using the 'background' color from the theme
-               CreateCircle()
+               MainView()
             }
         }
     }
@@ -33,23 +35,44 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun CreateCircle() {
+fun MainView() {
+    var counter by remember {
+        mutableStateOf(0)
+    }
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.LightGray
     ) {
-        Card(
-            modifier = Modifier
-                .width(80.dp).height(30.dp)
-                .padding(10.dp),
-            shape = CircleShape
-        ) {
-            Box(contentAlignment = Alignment.Center) {
-                Text(text = "Hello", color = Color.Black)
+        Column(verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally) {
+            Text( text = "$counter", style = TextStyle(color = Color.White,
+                fontSize = 20.sp,
+                fontWeight = Bold),
+                color = Color.White)
+            Spacer(modifier = Modifier.size(40.dp))
+            CreateButton(counter){ newValue->
+                counter = newValue
             }
         }
     }
 }
+
+@Composable
+private fun CreateButton( counter: Int, updateCounter: (Int)-> Unit) {
+
+    Card(
+        modifier = Modifier
+            .size(120.dp)
+            .padding(10.dp)
+            .clickable { updateCounter(counter+1) },
+        shape = CircleShape
+    ) {
+        Box(contentAlignment = Alignment.Center) {
+            Text(text = "Tap", color = Color.Black)
+        }
+    }
+}
+
 @Composable
 fun Greeting(name: String) {
     Surface(
@@ -65,6 +88,6 @@ fun Greeting(name: String) {
 fun DefaultPreview() {
     ButtonJetpackTheme {
         //Greeting("Android")
-        CreateCircle()
+        MainView()
     }
 }
